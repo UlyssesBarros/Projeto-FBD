@@ -37,6 +37,10 @@ if(isset($_POST["acao"])){
     if($_POST["acao"]=="inserirOrdemExecucao"){
         inserirOrdemExecucao();
     }
+    
+    if($_POST["acao"]=="inserirComposicao"){
+        inserirComposicao();
+    }
 }
 
 function inserirProduto(){
@@ -162,6 +166,15 @@ function inserirOrdemExecucao(){
     $banco = abrirBanco();
     $sql = "INSERT INTO ordem_execucao(COD_PROCESSO, COD_TAREFA, ORDEM) "
             . "VALUES ('{$_POST["COD_PROCESSO"]}','{$_POST["COD_TAREFA"]}','{$_POST["ORDEM"]}')";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function inserirComposicao(){
+    $banco = abrirBanco();
+    $sql = "INSERT INTO composicao(COD_PRODUTO, COD_COMPONENTE, QUANTIDADE) "
+            . "VALUES ('{$_POST["COD_PRODUTO"]}','{$_POST["COD_COMPONENTE"]}','{$_POST["QUANTIDADE"]}')";
     $banco->query($sql);
     $banco->close();
     voltarIndex();

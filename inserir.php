@@ -18,5 +18,8 @@
         <br>
         <br>
         <a href="inserirOrdemExecucao.php">Adicionar Ordem Execução</a>
+        <br>
+        <br>
+        <a href="inserirComposicao.php">Adicionar Composição</a>
     </body>
 </html>
