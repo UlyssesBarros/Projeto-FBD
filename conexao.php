@@ -35,7 +35,7 @@ if(isset($_POST["acao"])){
     }
     
     if($_POST["acao"]=="inserirOrdemExecucao"){
-        inserirOrdemExecuca();
+        inserirOrdemExecucao();
     }
 }
 
