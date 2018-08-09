@@ -21,5 +21,8 @@
         <br>
         <br>
         <a href="inserirComposicao.php">Adicionar Composição</a>
+        <br>
+        <br>
+        <a href="inserirComprado.php">Adicionar Comprado</a>
     </body>
 </html>
