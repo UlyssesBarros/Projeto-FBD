@@ -182,7 +182,7 @@ CREATE TABLE `processo` (
 --
 
 INSERT INTO `processo` (`COD_PROCESSO`, `NOME`) VALUES
-(2, ''),
+(2, 'Salgadinhos fritos'),
 (3, 'Batatas fritas'),
 (1, 'Salgadinhos assados'),
 (4, 'Salgadinhos extrusados');

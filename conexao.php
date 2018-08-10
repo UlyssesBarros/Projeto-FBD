@@ -80,6 +80,10 @@ if(isset($_POST["acao"])){
         alterarProducao();
     }
     
+    if($_POST["acao"]=="excluirProducao"){
+        excluirProducao();
+    }
+        
 }
 
 function inserirProduto(){
@@ -318,9 +322,22 @@ function selectCodProcesso($cod_processo){
     return $processo;
 }
 
+function selectCodProcessoByNome($cod_processo){
+    
+    $banco = abrirBanco();
+    $sql = "SELECT COD_PROCESSO FROM processo WHERE NOME=".$cod_processo;
+    $resultado = $banco->query($sql);
+    $banco->close();
+    if ($resultado == false){
+        return $resultado = 'deu ruim';
+    }
+    $processo = mysqli_fetch_assoc($resultado);
+    return $processo;
+}
+
 function alterarFornecedor(){
     $banco = abrirBanco();
-    $sql = "UPDATE fornecedor SET NOME='{$_POST["NOME"]} WHERE COD_FORNECEDOR='{$_POST["COD_FORNECEDOR"]}'";
+    $sql = "UPDATE fornecedor SET NOME='{$_POST["NOME"]}' WHERE COD_FORNECEDOR='{$_POST["COD_FORNECEDOR"]}'";
     echo $sql;
     $banco->query($sql);
     $banco->close();
@@ -346,6 +363,14 @@ function excluirFornecedor(){
 function excluirProcesso(){
     $banco = abrirBanco();
     $sql = "DELETE FROM processo WHERE cod_processo='{$_POST["COD_PROCESSO"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function excluirProducao(){
+    $banco = abrirBanco();
+    $sql = "DELETE FROM producao WHERE COD_PRODUTO='{$_POST["COD_PRODUTO"]}'";
     $banco->query($sql);
     $banco->close();
     voltarIndex();

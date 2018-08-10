@@ -5,7 +5,7 @@
 <html>
     <head> 
     <h1>
-        Ordem Execução 
+        Comprados 
     </h1>
     </head>
     <table border="1">

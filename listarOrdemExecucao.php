@@ -13,9 +13,7 @@
                 <tr>                                        
                     <th>Código Processo</th>
                     <th>Código Tarefa</th>
-                    <th>Ordem</th>
-                    <th>Editar</th>
-                    <th>Excluir</th>
+                    <th>Ordem</th>                    
                 </tr>
             </thead>
     <tbody>
@@ -24,21 +22,7 @@
                     <tr>
                     <td><?=$ordem["processo"]?></td>                                        
                     <td><?=$ordem["tarefa"]?></td>                    
-                    <td><?=$ordem["ordem"]?></td>                    
-                    <td>
-                        <form name="alterar" action="alterar.php" method="POST">
-                            <input type="hidden" name="COD_PROCESSO" value=<?=$ordem["ordem"]?> />
-                            <input type="submit" value="Editar" name="editar" />
-                            </form>
-                    </td>
-                    <td>
-                        <form name="excluir" action="conexao.php" method="POST">
-                            <input type="hidden" name="COD_TAREFA" value="<?=$producao["COD_PRODUTO"]?>" />
-                            <input type="hidden" name="acao" value="excluir" />
-                            <input type="submit" value="Excluir" name="excluir" />
-                            </form>
-                        
-                    </td>
+                    <td><?=$ordem["ordem"]?></td>                                        
                     </tr>
                  <?php  }
                 ?>

@@ -10,7 +10,7 @@
     </head>
     <body>
         <h1>
-            PRODUTOS 
+            Fornecedor 
         </h1>
     </body>
     
