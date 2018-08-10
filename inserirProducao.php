@@ -12,11 +12,11 @@
         <tbody>
             <tr>
                 <td>Código Produto:</td>
-                <td><input type="number" step="1" name="cod_produto" value="" /></td>
+                <td><input type="text" name="produto" value="" /></td>
             </tr>
             <tr>
                 <td>Código Processo:</td>
-                <td><input type="number" step="1" name="cod_processo" value="" /></td>
+                <td><input type="text" name="processo" value="" /></td>
             </tr>
                                  
             <tr>                

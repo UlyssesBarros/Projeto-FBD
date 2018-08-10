@@ -11,8 +11,8 @@
     <table border="1">
             <thead>
                 <tr>                    
-                    <th>Código Produto</th>
-                    <th>Código Processo</th>
+                    <th>Produto</th>
+                    <th>Processo</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                 </tr>
@@ -21,17 +21,17 @@
                 <?php
                     foreach ($todasProducao as $producao) { ?>
                     <tr>
-                    <td><?=$producao["COD_PRODUTO"]?></td>                                        
-                    <td><?=$producao["COD_PROCESSO"]?></td>                    
+                    <td><?=$producao["produto"]?></td>                                        
+                    <td><?=$producao["processo"]?></td>                    
                     <td>
                         <form name="alterar" action="alterarProducao.php" method="POST">
-                            <input type="hidden" name="COD_PRODUTO" value=<?=$producao["COD_PRODUTO"]?> />
+                            <input type="hidden" name="COD_PRODUTO" value=<?=$producao["cod_produto"]?> />
                             <input type="submit" value="Editar" name="editar" />
                             </form>
                     </td>
                     <td>
                         <form name="excluir" action="conexao.php" method="POST">
-                            <input type="hidden" name="COD_PRODUTO" value="<?=$producao["COD_PRODUTO"]?>" />
+                            <input type="hidden" name="COD_PRODUTO" value="<?=$producao["cod_produto"]?>" />
                             <input type="hidden" name="acao" value="excluirProducao" />
                             <input type="submit" value="Excluir" name="excluir" />
                             </form>

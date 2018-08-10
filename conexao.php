@@ -85,6 +85,9 @@ if(isset($_POST["acao"])){
     }
     
     if($_POST["acao"]=="alterarProducao"){
+        //echo $_POST["produto"];
+        //echo $_POST["processo"];
+        //echo $_POST["cod_produto"];
         alterarProducao();
     }
     
@@ -199,7 +202,11 @@ function selectAllProcesso(){
 
 function selectAllProducao(){
     $banco = abrirBanco();
-    $sql = "SELECT * FROM producao ORDER BY cod_produto";
+    $sql = "SELECT p.cod_produto, p.descricao as produto, pr.nome as processo
+            FROM producao
+            NATURAL JOIN produto as p
+            NATURAL JOIN processo as pr";
+    
     $resultado = $banco->query($sql);
     $banco->close();
     while ($row = mysqli_fetch_array($resultado)) {
@@ -283,7 +290,7 @@ function selectAllComprado(){
 }
 
 function abrirBanco(){
-    $conexao = new mysqli("localhost", "root", "", "fabricacao");
+    $conexao = new mysqli("localhost", "aluno", "alunodeinfo", "fabricacao");
     return $conexao;
 }
 
@@ -298,8 +305,9 @@ function inserirProcesso(){
 
 function inserirProducao(){
     $banco = abrirBanco();
-    $sql = "INSERT INTO producao(COD_PRODUTO, COD_PROCESSO) "
-            . "VALUES ('{$_POST["cod_produto"]}','{$_POST["cod_processo"]}')";
+    $sql = "INSERT INTO producao(COD_PRODUTO, COD_PROCESSO) 
+            VALUES ((select cod_produto from produto where descricao = '{$_POST["produto"]}'),
+                    (select cod_processo from processo where nome ='{$_POST["processo"]}'))";
     $banco->query($sql);
     $banco->close();
     voltarIndex();
@@ -432,7 +440,11 @@ function excluirProducao(){
 function selectCodProducao($cod_produto){
     
     $banco = abrirBanco();
-    $sql = "SELECT * FROM producao WHERE cod_produto =".$cod_produto;
+    $sql = "SELECT cod_processo, cod_produto, descricao as produto, nome as processo  
+            FROM producao
+            NATURAL JOIN produto 
+            NATURAL JOIN processo
+            WHERE cod_produto = '{$_POST["COD_PRODUTO"]}'";
     $resultado = $banco->query($sql);
     $banco->close();
     $producao = mysqli_fetch_assoc($resultado);
@@ -441,11 +453,15 @@ function selectCodProducao($cod_produto){
 
 function alterarProducao(){
     $banco = abrirBanco();
-    $sql = "UPDATE `producao` SET `COD_PRODUTO`='{$_POST['COD_PRODUTO']}',`COD_PROCESSO`='{$_POST['COD_PROCESSO']}' WHERE `COD_PRODUTO`='{$_POST['COD_PRODUTO']}'";
+    $sql = "UPDATE producao SET 
+    COD_PRODUTO = (SELECT cod_produto from produto where descricao= '{$_POST['PRODUTO']}'),
+    COD_PROCESSO =(SELECT cod_processo from processo where nome = '{$_POST['PROCESSO']}') 
+    WHERE COD_PRODUTO='{$_POST['COD_PRODUTO']}'";
     $banco->query($sql);
     $banco->close();
     voltarIndex();
 }
+
 
 function voltarIndex(){
     header("Location:index.php");
