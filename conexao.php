@@ -18,12 +18,24 @@ if(isset($_POST["acao"])){
         }
     }
     
+    if($_POST["acao"]=="excluirProduto"){
+        excluirProduto();
+    }
+    
     if($_POST["acao"]=="inserirTarefa"){
         inserirTarefa();
     }
     
     if($_POST["acao"]=="alterar"){
         alterarProduto();
+    }
+    
+    if($_POST["acao"]=="alterarTarefa"){
+        alterarTarefa();
+    }
+    
+    if($_POST["acao"]=="excluirTarefa"){
+        excluirTarefa();
     }
     
     if($_POST["acao"]=="inserirProcesso"){
@@ -45,12 +57,39 @@ if(isset($_POST["acao"])){
     if($_POST["acao"]=="inserirComprado"){
         inserirComprado();
     }
+    
+    if($_POST["acao"]=="inserirFornecedor"){
+        inserirFornecedor();
+    }
+    if($_POST["acao"]=="excluirFornecedor"){
+        excluirFornecedor();
+    }
+    if($_POST["acao"]=="alterarFornecedor"){
+        alterarFornecedor();
+    }
+    
+    if($_POST["acao"]=="alterarProcesso"){
+        alterarProcesso();
+    }
+    
+    if($_POST["acao"]=="excluirProcesso"){
+        excluirProcesso();
+    }
+    
 }
 
 function inserirProduto(){
     $banco = abrirBanco();
     $sql = "INSERT INTO produto(DESCRICAO, TIPO) "
             . "VALUES ('{$_POST["descricao"]}','{$_POST["tipo"]}')";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function excluirProduto(){
+    $banco = abrirBanco();
+    $sql = "DELETE FROM produto WHERE cod_produto='{$_POST["COD_PRODUTO"]}'";
     $banco->query($sql);
     $banco->close();
     voltarIndex();
@@ -65,6 +104,23 @@ function alterarProduto(){
     voltarIndex();
 }
 
+function alterarTarefa(){
+    $banco = abrirBanco();
+    $sql = "UPDATE tarefa SET NOME='{$_POST["NOME"]}',"
+            . "TEMPO='{$_POST["TEMPO"]}' WHERE COD_TAREFA='{$_POST["COD_TAREFA"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function excluirTarefa(){
+    $banco = abrirBanco();
+    $sql = "DELETE FROM tarefa WHERE cod_tarefa='{$_POST["COD_TAREFA"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
 function selectCodProduto($cod_produto){
     $banco = abrirBanco();
     $sql = "SELECT * FROM produto WHERE cod_produto =".$cod_produto;
@@ -72,6 +128,15 @@ function selectCodProduto($cod_produto){
     $banco->close();
     $produto = mysqli_fetch_assoc($resultado);
     return $produto;
+}
+
+function selectCodTarefa($cod_tarefa){
+    $banco = abrirBanco();
+    $sql = "SELECT * FROM tarefa WHERE cod_tarefa =".$cod_tarefa;
+    $resultado = $banco->query($sql);
+    $banco->close();
+    $tarefa = mysqli_fetch_assoc($resultado);
+    return $tarefa;
 }
 
 function inserirTarefa(){
@@ -96,7 +161,7 @@ function selectAllProduto(){
 
 function selectAllTarefas(){
     $banco = abrirBanco();
-    $sql = "SELECT * FROM tarefa ORDER BY nome";
+    $sql = "SELECT * FROM tarefa ORDER BY cod_tarefa";
     $resultado = $banco->query($sql);
     $banco->close();
     while ($row = mysqli_fetch_array($resultado)) {
@@ -105,47 +170,64 @@ function selectAllTarefas(){
     return $todasTarefas;
 }
 
-function abrirBanco(){
-    $conexao = new mysqli("localhost", "root", "", "fabricacao");
-    return $conexao;
-}
-
-function alterarPessoa(){
+function selectAllProcesso(){
     $banco = abrirBanco();
-    $sql = "UPDATE pessoa SET nome='{$_POST["nome"]}',"
-            . "nascimento='{$_POST["nascimento"]}',endereco='{$_POST["endereco"]}',"
-            . "telefone='{$_POST["telefone"]}' WHERE id='{$_POST["id"]}'";
-    $banco->query($sql);
-    $banco->close();
-    voltarIndex();
-}
-
-function excluirPessoa(){
-    $banco = abrirBanco();
-    $sql = "DELETE FROM pessoa WHERE id='{$_POST["id"]}'";
-    $banco->query($sql);
-    $banco->close();
-    voltarIndex();
-}
-
-function selectAllPessoa(){
-    $banco = abrirBanco();
-    $sql = "SELECT * FROM pessoa ORDER BY nome";
+    $sql = "SELECT * FROM processo ORDER BY nome";
     $resultado = $banco->query($sql);
     $banco->close();
     while ($row = mysqli_fetch_array($resultado)) {
-        $grupo[] = $row;
+        $todosProcessos[] = $row;
     }
-    return $grupo;
+    return $todosProcessos;
 }
 
-function selectIdPessoa($id){
+function selectAllProducao(){
     $banco = abrirBanco();
-    $sql = "SELECT * FROM pessoa WHERE id =".$id;
+    $sql = "SELECT * FROM producao ORDER BY cod_produto";
     $resultado = $banco->query($sql);
     $banco->close();
-    $pessoa = mysqli_fetch_assoc($resultado);
-    return $pessoa;
+    while ($row = mysqli_fetch_array($resultado)) {
+        $todasProducao[] = $row;
+    }
+    return $todasProducao;
+}
+
+function selectAllOrdens(){
+    $banco = abrirBanco();
+    $sql = "SELECT * FROM ordem";
+    $resultado = $banco->query($sql);
+    $banco->close();
+    while ($row = mysqli_fetch_array($resultado)) {
+        $todasOrdens[] = $row;
+    }
+    return $todasOrdens;
+}
+
+function selectAllComposicao(){
+    $banco = abrirBanco();
+    $sql = "SELECT * FROM composicao ORDER BY cod_produto";
+    $resultado = $banco->query($sql);
+    $banco->close();
+    while ($row = mysqli_fetch_array($resultado)) {
+        $todasComposicao[] = $row;
+    }
+    return $todasComposicao;
+}
+
+function selectAllComprado(){
+    $banco = abrirBanco();
+    $sql = "SELECT * FROM comprado_no ORDER BY cod_produto";
+    $resultado = $banco->query($sql);
+    $banco->close();
+    while ($row = mysqli_fetch_array($resultado)) {
+        $todosComprado[] = $row;
+    }
+    return $todosComprado;
+}
+
+function abrirBanco(){
+    $conexao = new mysqli("localhost", "root", "", "fabricacao");
+    return $conexao;
 }
 
 function inserirProcesso(){
@@ -188,6 +270,96 @@ function inserirComprado(){
     $banco = abrirBanco();
     $sql = "INSERT INTO comprado_no(COD_PRODUTO, COD_FORNECEDOR, PRAZO_ENTREGA) "
             . "VALUES ('{$_POST["COD_PRODUTO"]}','{$_POST["COD_FORNECEDOR"]}','{$_POST["PRAZO_ENTREGA"]}')";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function inserirFornecedor(){
+    $banco = abrirBanco();
+    $sql = "INSERT INTO fornecedor(nome) VALUES ('{$_POST["nome"]}')";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function selectAllFornecedor(){
+    $banco = abrirBanco();
+    $sql = "SELECT * FROM fornecedor ORDER BY nome";
+    $resultado = $banco->query($sql);
+    $banco->close();
+    while ($row = mysqli_fetch_array($resultado)) {
+        $todosFornecedores[] = $row;
+    }
+    return $todosFornecedores;
+}
+
+function selectCodFornecedor($cod_fornecedor){
+    
+    $banco = abrirBanco();
+    $sql = "SELECT * FROM fornecedor WHERE cod_fornecedor =".$cod_fornecedor;
+    $resultado = $banco->query($sql);
+    $banco->close();
+    $fornecedor = mysqli_fetch_assoc($resultado);
+    return $fornecedor;
+}
+
+function selectCodProcesso($cod_processo){
+    
+    $banco = abrirBanco();
+    $sql = "SELECT * FROM processo WHERE cod_processo =".$cod_processo;
+    $resultado = $banco->query($sql);
+    $banco->close();
+    $processo = mysqli_fetch_assoc($resultado);
+    return $processo;
+}
+
+function alterarFornecedor(){
+    $banco = abrirBanco();
+    $sql = "UPDATE fornecedor SET NOME='{$_POST["NOME"]} WHERE COD_FORNECEDOR='{$_POST["COD_FORNECEDOR"]}'";
+    echo $sql;
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function alterarProcesso(){
+    $banco = abrirBanco();
+    $sql = "UPDATE processo SET NOME='{$_POST["NOME"]}' WHERE COD_PROCESSO='{$_POST["COD_PROCESSO"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function excluirFornecedor(){
+    $banco = abrirBanco();
+    $sql = "DELETE FROM fornecedor WHERE cod_fornecedor='{$_POST["COD_FORNECEDOR"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function excluirProcesso(){
+    $banco = abrirBanco();
+    $sql = "DELETE FROM processo WHERE cod_processo='{$_POST["COD_PROCESSO"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function selectCodProducao($cod_produto){
+    
+    $banco = abrirBanco();
+    $sql = "SELECT * FROM producao WHERE cod_produto =".$cod_produto;
+    $resultado = $banco->query($sql);
+    $banco->close();
+    $producao = mysqli_fetch_assoc($resultado);
+    return $producao;
+}
+
+function alterarProducao(){
+    $banco = abrirBanco();
+    $sql = "UPDATE producao SET COD_PRODUTO='{$_POST['COD_PRODUTO']}', COD_PROCESSO='{$_POST['COD_PROCESSO']}' WHERE COD_PRODUTO='{$_POST["COD_PRODUTO"]}'";
     $banco->query($sql);
     $banco->close();
     voltarIndex();

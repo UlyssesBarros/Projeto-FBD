@@ -1,40 +1,40 @@
 <?php include("conexao.php");
-      $todasTarefas = selectAllTarefas();
+      $todasOrdens = selectAllOrdens();
 ?>
 
 <html>
     <head> 
     <h1>
-        TAREFAS 
+        Ordem Execução 
     </h1>
     </head>
     <table border="1">
             <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Tempo</th>
+                <tr>                                        
+                    <th>Código Processo</th>
                     <th>Código Tarefa</th>
+                    <th>Ordem</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                 </tr>
             </thead>
     <tbody>
                 <?php
-                    foreach ($todasTarefas as $tarefa) { ?>
+                    foreach ($todasOrdens as $ordem) { ?>
                     <tr>
-                    <td><?=$tarefa["NOME"]?></td>                                        
-                    <td><?=$tarefa["TEMPO"]?></td>
-                    <td><?=$tarefa["COD_TAREFA"]?></td>
+                    <td><?=$ordem["processo"]?></td>                                        
+                    <td><?=$ordem["tarefa"]?></td>                    
+                    <td><?=$ordem["ordem"]?></td>                    
                     <td>
-                        <form name="alterar" action="alterarTarefa.php" method="POST">
-                            <input type="hidden" name="COD_TAREFA" value=<?=$tarefa["COD_TAREFA"]?> />
+                        <form name="alterar" action="alterar.php" method="POST">
+                            <input type="hidden" name="COD_PROCESSO" value=<?=$ordem["ordem"]?> />
                             <input type="submit" value="Editar" name="editar" />
                             </form>
                     </td>
                     <td>
                         <form name="excluir" action="conexao.php" method="POST">
-                            <input type="hidden" name="COD_TAREFA" value="<?=$tarefa["COD_TAREFA"]?>" />
-                            <input type="hidden" name="acao" value="excluirTarefa" />
+                            <input type="hidden" name="COD_TAREFA" value="<?=$producao["COD_PRODUTO"]?>" />
+                            <input type="hidden" name="acao" value="excluir" />
                             <input type="submit" value="Excluir" name="excluir" />
                             </form>
                         

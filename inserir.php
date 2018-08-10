@@ -24,5 +24,8 @@
         <br>
         <br>
         <a href="inserirComprado.php">Adicionar Comprado</a>
+        <br>
+        <br>
+        <a href="inserirFornecedor.php">Adicionar Fornecedor</a>
     </body>
 </html>

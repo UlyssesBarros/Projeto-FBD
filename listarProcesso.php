@@ -1,5 +1,5 @@
 <?php include("conexao.php");
-      $todosProdutos = selectAllProduto();      
+      $todosProcessos = selectAllProcesso();      
 ?>
 
 <html>
@@ -10,37 +10,35 @@
     </head>
     <body>
         <h1>
-            PRODUTOS 
+            PROCESSOS 
         </h1>
     </body>
     
     <table border="1">
             <thead>
-                <tr>
-                    <th>Descrição</th>
-                    <th>Tipo</th>                    
-                    <th>Código Produto</th> 
+                <tr>                         
+                    <th>Nome</th> 
+                    <th>Código Processo</th>                     
                     <th>Editar</th>
                     <th>Excluir</th>
                 </tr>
             </thead>
     <tbody>
                 <?php
-                    foreach ($todosProdutos as $produto) { ?>
+                    foreach ($todosProcessos as $processo) { ?>
                     <tr>
-                        <td><?= utf8_decode($produto["DESCRICAO"])?></td>                                        
-                    <td><?=$produto["TIPO"]?></td>
-                    <td><?=$produto["COD_PRODUTO"]?></td>
+                        <td><?= utf8_decode($processo["NOME"])?></td>                                        
+                    <td><?=$processo["COD_PROCESSO"]?></td>                    
                     <td>
-                        <form name="alterar" action="alterarProduto.php" method="POST">
-                            <input type="hidden" name="COD_PRODUTO" value=<?=$produto["COD_PRODUTO"]?> />
+                        <form name="alterar" action="alterarProcesso.php" method="POST">
+                            <input type="hidden" name="COD_PROCESSO" value=<?=$processo["COD_PROCESSO"]?> />
                             <input type="submit" value="Editar" name="editar" />
                             </form>
                     </td>
                     <td>
                         <form name="excluir" action="conexao.php" method="POST">
-                            <input type="hidden" name="COD_PRODUTO" value="<?=$produto["COD_PRODUTO"]?>" />
-                            <input type="hidden" name="acao" value="excluirProduto" />
+                            <input type="hidden" name="COD_PROCESSO" value="<?=$processo["COD_PROCESSO"]?>" />
+                            <input type="hidden" name="acao" value="excluirProcesso" />
                             <input type="submit" value="Excluir" name="excluir" />
                             </form>
                         

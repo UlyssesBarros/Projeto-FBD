@@ -1,5 +1,5 @@
 <?php include("conexao.php");
-      $todosProdutos = selectAllProduto();      
+      $todosFornecedores = selectAllFornecedor();      
 ?>
 
 <html>
@@ -17,30 +17,27 @@
     <table border="1">
             <thead>
                 <tr>
-                    <th>Descrição</th>
-                    <th>Tipo</th>                    
-                    <th>Código Produto</th> 
+                    <th>Nome</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                 </tr>
             </thead>
     <tbody>
                 <?php
-                    foreach ($todosProdutos as $produto) { ?>
+                    foreach ($todosFornecedores as $fornecedor) { ?>
                     <tr>
-                        <td><?= utf8_decode($produto["DESCRICAO"])?></td>                                        
-                    <td><?=$produto["TIPO"]?></td>
-                    <td><?=$produto["COD_PRODUTO"]?></td>
+                        <td><?= utf8_decode($fornecedor["NOME"])?></td>                                        
+                
                     <td>
-                        <form name="alterar" action="alterarProduto.php" method="POST">
-                            <input type="hidden" name="COD_PRODUTO" value=<?=$produto["COD_PRODUTO"]?> />
+                        <form name="alterar" action="alterarFornecedor.php" method="POST">
+                            <input type="hidden" name="COD_FORNECEDOR" value=<?=$fornecedor["COD_FORNECEDOR"]?> />
                             <input type="submit" value="Editar" name="editar" />
                             </form>
                     </td>
                     <td>
                         <form name="excluir" action="conexao.php" method="POST">
-                            <input type="hidden" name="COD_PRODUTO" value="<?=$produto["COD_PRODUTO"]?>" />
-                            <input type="hidden" name="acao" value="excluirProduto" />
+                            <input type="hidden" name="COD_FORNECEDOR" value="<?=$fornecedor["COD_FORNECEDOR"]?>" />
+                            <input type="hidden" name="acao" value="excluirFornecedor" />
                             <input type="submit" value="Excluir" name="excluir" />
                             </form>
                         
@@ -51,4 +48,3 @@
             </tbody>
           
 </html>
-
