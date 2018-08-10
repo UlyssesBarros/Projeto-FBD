@@ -21,8 +21,8 @@ $produto = selectCodProducao($_POST["COD_PRODUTO"]);
                 <td><input type="text" name="COD_PROCESSO" value="<?=$produto["COD_PROCESSO"]?>" size="20"/></td>
             </tr>                                   
             <tr>
-                <td><input type="hidden" name="acao" value="alterarProcesso" />
-                    <input type="hidden" name="COD_PRODUTO" value="<?=$producao["COD_PRODUTO"]?>" />
+                <td><input type="hidden" name="acao" value="alterarProducao" />
+                    <input type="hidden" name="COD_PRODUTO" value="<?=$produto["COD_PRODUTO"]?>" />
                 </td>
                 <td><input type="submit" value="Enviar" name="Enviar" /></td>
             </tr>

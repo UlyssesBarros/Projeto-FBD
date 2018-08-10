@@ -76,6 +76,10 @@ if(isset($_POST["acao"])){
         excluirProcesso();
     }
     
+    if($_POST["acao"]=="alterarProducao"){
+        alterarProducao();
+    }
+    
 }
 
 function inserirProduto(){
@@ -359,7 +363,7 @@ function selectCodProducao($cod_produto){
 
 function alterarProducao(){
     $banco = abrirBanco();
-    $sql = "UPDATE producao SET COD_PRODUTO='{$_POST['COD_PRODUTO']}', COD_PROCESSO='{$_POST['COD_PROCESSO']}' WHERE COD_PRODUTO='{$_POST["COD_PRODUTO"]}'";
+    $sql = "UPDATE `producao` SET `COD_PRODUTO`='{$_POST['COD_PRODUTO']}',`COD_PROCESSO`='{$_POST['COD_PROCESSO']}' WHERE `COD_PRODUTO`='{$_POST['COD_PRODUTO']}'";
     $banco->query($sql);
     $banco->close();
     voltarIndex();
