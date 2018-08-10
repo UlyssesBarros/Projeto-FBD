@@ -1,423 +1,215 @@
--- phpMyAdmin SQL Dump
--- version 4.8.2
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: 10-Ago-2018 às 04:43
--- Versão do servidor: 10.1.34-MariaDB
--- PHP Version: 7.2.7
+CREATE DATABASE FABRICACAO;
+USE FABRICACAO;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `fabricacao`
---
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `composicao`
---
-
-CREATE TABLE `composicao` (
-  `COD_PRODUTO` int(11) NOT NULL,
-  `COD_COMPONENTE` int(11) NOT NULL,
-  `QUANTIDADE` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `composicao`
---
-
-INSERT INTO `composicao` (`COD_PRODUTO`, `COD_COMPONENTE`, `QUANTIDADE`) VALUES
-(10, 1, 2),
-(10, 3, 1),
-(11, 1, 2),
-(11, 5, 1),
-(12, 2, 2),
-(12, 3, 1),
-(13, 2, 2),
-(13, 4, 1),
-(13, 8, 1),
-(14, 9, 2),
-(14, 6, 1),
-(14, 8, 1),
-(15, 9, 2),
-(16, 1, 1),
-(16, 2, 1),
-(16, 7, 1),
-(17, 9, 2),
-(17, 8, 1);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `comprado_no`
---
-
-CREATE TABLE `comprado_no` (
-  `COD_PRODUTO` int(11) NOT NULL,
-  `COD_FORNECEDOR` int(11) NOT NULL,
-  `PRAZO_ENTREGA` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `comprado_no`
---
-
-INSERT INTO `comprado_no` (`COD_PRODUTO`, `COD_FORNECEDOR`, `PRAZO_ENTREGA`) VALUES
-(1, 1, '13/09/2019'),
-(2, 1, '13/09/2019'),
-(3, 2, '01/12/2018'),
-(4, 2, '01/12/2018'),
-(5, 2, '01/12/2018'),
-(6, 2, '01/12/2018'),
-(7, 2, '01/12/2018'),
-(8, 2, '01/12/2018'),
-(9, 3, '30/08/2018');
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `fornecedor`
---
-
-CREATE TABLE `fornecedor` (
-  `COD_FORNECEDOR` int(11) NOT NULL,
-  `NOME` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `fornecedor`
---
-
-INSERT INTO `fornecedor` (`COD_FORNECEDOR`, `NOME`) VALUES
-(3, 'CEASA'),
-(2, 'UFRPE aromatizantes e corantes'),
-(1, 'Zé Fornecedor de Grãos LTDA');
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `insumo_fornecedor`
--- (See below for the actual view)
---
-CREATE TABLE `insumo_fornecedor` (
-`produto` varchar(30)
-,`fornecedor` varchar(30)
-,`prazo` varchar(20)
+CREATE TABLE PROCESSO (
+	COD_PROCESSO INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    NOME VARCHAR(30) NOT NULL UNIQUE
 );
 
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `ordem`
--- (See below for the actual view)
---
-CREATE TABLE `ordem` (
-`processo` varchar(30)
-,`tarefa` varchar(30)
-,`ordem` int(11)
+CREATE TABLE PRODUTO (
+	COD_PRODUTO INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    DESCRICAO VARCHAR(30) NOT NULL UNIQUE,
+    TIPO CHAR(1) NOT NULL
 );
 
--- --------------------------------------------------------
+CREATE TABLE PRODUCAO (
+	COD_PRODUTO INTEGER NOT NULL,
+    COD_PROCESSO INTEGER NOT NULL,
+    
+    FOREIGN KEY (COD_PROCESSO) REFERENCES PROCESSO(COD_PROCESSO),
+    FOREIGN KEY (COD_PRODUTO) REFERENCES PRODUTO(COD_PRODUTO)
+);
 
---
--- Estrutura da tabela `ordem_execucao`
---
+CREATE TABLE COMPOSICAO (
+	COD_PRODUTO INTEGER NOT NULL,
+    COD_COMPONENTE INTEGER NOT NULL,
+    QUANTIDADE DOUBLE NOT NULL,
+    
+    FOREIGN KEY (COD_PRODUTO) REFERENCES PRODUTO (COD_PRODUTO),
+    FOREIGN KEY (COD_COMPONENTE) REFERENCES PRODUTO (COD_PRODUTO)
+);
 
-CREATE TABLE `ordem_execucao` (
-  `COD_PROCESSO` int(11) NOT NULL,
-  `COD_TAREFA` int(11) NOT NULL,
-  `ORDEM` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE FORNECEDOR (
+	COD_FORNECEDOR INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    NOME VARCHAR(30) UNIQUE NOT NULL
+);
 
---
--- Extraindo dados da tabela `ordem_execucao`
---
+CREATE TABLE COMPRADO_NO (
+	COD_PRODUTO INTEGER NOT NULL,
+    COD_FORNECEDOR INTEGER NOT NULL,
+    PRAZO_ENTREGA VARCHAR(20) NOT NULL,
+    
+    FOREIGN KEY (COD_PRODUTO) REFERENCES PRODUTO (COD_PRODUTO),
+    FOREIGN KEY (COD_FORNECEDOR) REFERENCES FORNECEDOR (COD_FORNECEDOR)
+);
 
-INSERT INTO `ordem_execucao` (`COD_PROCESSO`, `COD_TAREFA`, `ORDEM`) VALUES
-(1, 4, 2),
-(1, 5, 3),
-(1, 7, 4),
-(1, 8, 5),
-(1, 10, 6),
-(1, 9, 7),
-(2, 2, 1),
-(2, 3, 2),
-(2, 6, 3),
-(2, 11, 4),
-(2, 5, 5),
-(2, 8, 6),
-(2, 10, 7),
-(2, 9, 8),
-(4, 2, 1),
-(4, 16, 2),
-(4, 17, 3),
-(4, 10, 4),
-(4, 9, 5);
+CREATE TABLE TAREFA (
+	COD_TAREFA INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    TEMPO DOUBLE NOT NULL,
+    NOME VARCHAR(30) NOT NULL 
+);
 
--- --------------------------------------------------------
+CREATE TABLE ORDEM_EXECUCAO (
+	COD_PROCESSO INTEGER NOT NULL,
+    COD_TAREFA INTEGER NOT NULL,
+    ORDEM INTEGER NOT NULL,
+    
+    FOREIGN KEY(COD_PROCESSO) REFERENCES PROCESSO(COD_PROCESSO),
+    FOREIGN KEY(COD_TAREFA) REFERENCES TAREFA(COD_TAREFA)
+);
 
---
--- Estrutura da tabela `processo`
---
+INSERT INTO PROCESSO (NOME) VALUES 
+('Salgadinhos assados'), 
+('Salgadinhos fritos'), 
+('Batatas fritas'), 
+('Salgadinhos extrusados');
 
-CREATE TABLE `processo` (
-  `COD_PROCESSO` int(11) NOT NULL,
-  `NOME` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO TAREFA (TEMPO, NOME) VALUES 
+(240, 'Cozinhar o milho'),
+(60, 'Misturar trigo e água'),  
+(15,'Esticar a massa'), 		
+(30,'Moer grãos de milho'),		
+(10, 'Cortar a massa'),			
+(5,'Receber coloração'), 		
+(10,'Assar a massa'),			
+(5, 'Fritar em oléo vegetal'),	
+(2,'Empacotar'),				
+(10, 'Aromatizar'),				
+(45,'Secar massa'),				
+(10, 'Lavar batatas'),			
+(5, 'Descascar batatas'),		
+(5, 'Cortar batatas'),			
+(10, 'Cozinhar batatas'),		
+(5 , 'Prensar massa'),			
+(5 , 'Esfriar massa');			
 
---
--- Extraindo dados da tabela `processo`
---
+INSERT INTO ORDEM_EXECUCAO (COD_PROCESSO,COD_TAREFA,ORDEM) VALUES 
+(1,1,1),(1,4,2),(1,5,3),(1,7,4),(1,8,5),(1,10,6),(1,9,7), 
+(2,2,1),(2,3,2),(2,6,3),(2,11,4),(2,5,5),(2,8,6),(2,10,7),(2,9,8), 
+(3,12,1),(3,13,2),(3,14,3),(3,15,4),(3,8,5),(3,10,6),(3,9,7), 
+(4,2,1),(4,16,2),(4,17,3),(4,10,4),(4,9,5);
 
-INSERT INTO `processo` (`COD_PROCESSO`, `NOME`) VALUES
-(2, 'Salgadinhos fritos'),
-(3, 'Batatas fritas'),
-(1, 'Salgadinhos assados'),
-(4, 'Salgadinhos extrusados');
+INSERT INTO FORNECEDOR (NOME) VALUES
+('Zé Fornecedor de Grãos LTDA'),
+('UFRPE aromatizantes e corantes'),
+('CEASA');
 
--- --------------------------------------------------------
+INSERT INTO PRODUTO (DESCRICAO, TIPO) VALUES 
+('Milho','I'),
+('Trigo','I'),
+('Aromatizante queijo','I'),
+('Aromatizante bacon','I'),
+('Aromatizante presunto','I'),
+('Aromatizante churrasco','I'),
+('Aromatizante requeijão','I'),
+('Corante Marrom','I'),
+('Batata','I'),
+('Fandangos Queijo','P'),
+('Fandangos Presunto','P'),
+('Doritos','P'),
+('Baconzitos','P'),
+('Ruffles Churrasco','P'),
+('Ruffles Tradicional','P'),
+('Cheetos Requeijão','P'),
+('Sensações','P'),
+('Pingo de ouro bacon','P');
 
---
--- Estrutura da tabela `producao`
---
+INSERT INTO PRODUCAO(COD_PRODUTO,COD_PROCESSO) VALUES 
+(10,1),(11,1),(18,1),
+(12,2),(13,2),
+(14,3),(15,3),(17,3),
+(16,4);
 
-CREATE TABLE `producao` (
-  `COD_PRODUTO` int(11) NOT NULL,
-  `COD_PROCESSO` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO COMPOSICAO (COD_PRODUTO,COD_COMPONENTE,QUANTIDADE) VALUES
+(10,1,2),(10,3,1),
+(11,1,2),(11,5,1),
+(12,2,2),(12,3,1),
+(13,2,2),(13,4,1),(13,8,1),
+(14,9,2),(14,6,1),(14,8,1),
+(15,9,2),
+(16,1,1),(16,2,1),(16,7,1),
+(17,9,2),(17,8,1),
+(18,1,1),(18,2,1),(18,4,1),(18,8,1);
 
---
--- Extraindo dados da tabela `producao`
---
+INSERT INTO COMPRADO_NO (COD_PRODUTO,COD_FORNECEDOR,PRAZO_ENTREGA) VALUES
+(1,1,'13/09/2019'),
+(2,1,'13/09/2019'),
+(3,2,'01/12/2018'),
+(4,2,'01/12/2018'),
+(5,2,'01/12/2018'),
+(6,2,'01/12/2018'),
+(7,2,'01/12/2018'),
+(8,2,'01/12/2018'),
+(9,3,'30/08/2018');
 
-INSERT INTO `producao` (`COD_PRODUTO`, `COD_PROCESSO`) VALUES
-(10, 1),
-(11, 1),
-(12, 2),
-(13, 2),
-(16, 4);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `produto`
---
-
-CREATE TABLE `produto` (
-  `COD_PRODUTO` int(11) NOT NULL,
-  `DESCRICAO` varchar(30) NOT NULL,
-  `TIPO` char(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `produto`
---
-
-INSERT INTO `produto` (`COD_PRODUTO`, `DESCRICAO`, `TIPO`) VALUES
-(1, 'Milho', 'I'),
-(2, 'Trigo', 'I'),
-(3, 'Aromatizante queijo', 'I'),
-(4, 'Aromatizante bacon', 'I'),
-(5, 'Aromatizante presunto', 'I'),
-(6, 'Aromatizante churrasco', 'I'),
-(7, 'Aromatizante requeijão', 'I'),
-(8, 'Corante Marrom', 'I'),
-(9, 'Batata', 'I'),
-(10, 'Fandangos Queijo', 'P'),
-(11, 'Fandangos Presunto', 'P'),
-(12, 'Doritos', 'P'),
-(13, 'Baconzitos', 'P'),
-(14, 'Ruffles Churrasco', 'P'),
-(15, 'Ruffles Tradicional', 'P'),
-(16, 'Cheetos Requeijão', 'P'),
-(17, 'Sensações', 'P'),
-(18, 'Pingo de ouro bacon', 'P');
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `tarefa`
---
-
-CREATE TABLE `tarefa` (
-  `COD_TAREFA` int(11) NOT NULL,
-  `TEMPO` double NOT NULL,
-  `NOME` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `tarefa`
---
-
-INSERT INTO `tarefa` (`COD_TAREFA`, `TEMPO`, `NOME`) VALUES
-(1, 240, 'Cozinhar o milho'),
-(2, 60, 'Misturar trigo e água'),
-(3, 15, 'Esticar a massa'),
-(4, 30, 'Moer grãos de milho'),
-(5, 10, 'Cortar a massa'),
-(6, 5, 'Receber coloração'),
-(7, 10, 'Assar a massa'),
-(8, 5, 'Fritar em oléo vegetal'),
-(9, 2, 'Empacotar'),
-(10, 10, 'Aromatizar'),
-(11, 45, 'Secar massa'),
-(12, 10, 'Lavar batatas'),
-(13, 5, 'Descascar batatas'),
-(14, 5, 'Cortar batatas'),
-(15, 10, 'Cozinhar batatas'),
-(16, 5, 'Prensar massa'),
-(17, 5, 'Esfriar massa');
+CREATE VIEW insumo_fornecedor as (
+SELECT i.descricao as produto,f.nome as fornecedor,c.prazo_entrega as prazo
+FROM produto as i, fornecedor as f, comprado_no as c
+WHERE c.cod_produto = i.cod_produto and c.cod_fornecedor = f.cod_fornecedor);
 
 -- --------------------------------------------------------
 
---
--- Structure for view `insumo_fornecedor`
---
-DROP TABLE IF EXISTS `insumo_fornecedor`;
+CREATE VIEW ordem AS (
+	SELECT p.nome AS processo, t.nome AS tarefa, o.ordem
+    FROM processo AS p, tarefa AS t, ordem_execucao AS o
+    WHERE p.cod_processo = o.cod_processo AND t.cod_tarefa = o.cod_tarefa
+    ORDER BY processo
+);
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `insumo_fornecedor`  AS  (select `i`.`DESCRICAO` AS `produto`,`f`.`NOME` AS `fornecedor`,`c`.`PRAZO_ENTREGA` AS `prazo` from ((`produto` `i` join `fornecedor` `f`) join `comprado_no` `c`) where ((`c`.`COD_PRODUTO` = `i`.`COD_PRODUTO`) and (`c`.`COD_FORNECEDOR` = `f`.`COD_FORNECEDOR`))) ;
+/*Consulta que retorna em ordem as tarefas do processo "Batatas fritas"
+select tarefa.nome, ordem_execucao.ordem
+from processo, tarefa, ordem_execucao
+where processo.nome = 'Batatas fritas' 
+and processo.cod_processo = ordem_execucao.cod_processo
+and tarefa.cod_tarefa = ordem_execucao.cod_tarefa
+order by ordem_execucao.ordem;
 
--- --------------------------------------------------------
+#Consulta que retorna o tempo de cada processo em minutos
+select processo.nome, sum(tarefa.tempo)
+from processo, tarefa, ordem_execucao
+where processo.cod_processo = ordem_execucao.cod_processo 
+and tarefa.cod_tarefa = ordem_execucao.cod_tarefa
+group by processo.nome;
 
---
--- Structure for view `ordem`
---
-DROP TABLE IF EXISTS `ordem`;
+#Consulta que retorna em ordem as tarefas de acordo com o produto
+select tarefa.nome, ordem_execucao.ordem
+from tarefa, ordem_execucao, produto, producao
+where produto.descricao = 'Pingo de ouro bacon' 
+and producao.cod_produto = produto.cod_produto
+and producao.cod_processo = ordem_execucao.cod_processo
+and tarefa.cod_tarefa = ordem_execucao.cod_tarefa;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ordem`  AS  (select `p`.`NOME` AS `processo`,`t`.`NOME` AS `tarefa`,`o`.`ORDEM` AS `ordem` from ((`processo` `p` join `tarefa` `t`) join `ordem_execucao` `o`) where ((`p`.`COD_PROCESSO` = `o`.`COD_PROCESSO`) and (`t`.`COD_TAREFA` = `o`.`COD_TAREFA`))) ;
+#consulta que retorna em ordem os componentes de um produto
+select p.descricao, pr.descricao
+from composicao as c
+natural join produto as p
+inner join produto as pr 
+on pr.cod_produto = c.cod_componente;
 
---
--- Indexes for dumped tables
---
+#consulta que retorna produtos e seus respectivos processos
+select produto.descricao, processo.nome
+from producao
+natural join produto
+natural join processo;
 
---
--- Indexes for table `composicao`
---
-ALTER TABLE `composicao`
-  ADD KEY `COD_PRODUTO` (`COD_PRODUTO`),
-  ADD KEY `COD_COMPONENTE` (`COD_COMPONENTE`);
+#consulta que retorna produtos e seus fornecedores
+select produto.descricao, fornecedor.nome, comprado_no.prazo_entrega
+from comprado_no
+inner join produto
+on produto.cod_produto = comprado_no.cod_produto
+natural join fornecedor;
 
---
--- Indexes for table `comprado_no`
---
-ALTER TABLE `comprado_no`
-  ADD KEY `COD_PRODUTO` (`COD_PRODUTO`),
-  ADD KEY `COD_FORNECEDOR` (`COD_FORNECEDOR`);
+#consulta que retorna os insumos
+select descricao
+from produto 
+where produto.tipo = "I";
 
---
--- Indexes for table `fornecedor`
---
-ALTER TABLE `fornecedor`
-  ADD PRIMARY KEY (`COD_FORNECEDOR`),
-  ADD UNIQUE KEY `NOME` (`NOME`);
+select tarefa.nome
+from  ordem_execucao
+natural join tarefa
+where ordem_execucao.cod_processo in (select cod_processo 
+from processo
+where nome = 'Salgadinhos assados');*/
 
---
--- Indexes for table `ordem_execucao`
---
-ALTER TABLE `ordem_execucao`
-  ADD KEY `COD_PROCESSO` (`COD_PROCESSO`),
-  ADD KEY `COD_TAREFA` (`COD_TAREFA`);
 
---
--- Indexes for table `processo`
---
-ALTER TABLE `processo`
-  ADD PRIMARY KEY (`COD_PROCESSO`),
-  ADD UNIQUE KEY `NOME` (`NOME`);
 
---
--- Indexes for table `producao`
---
-ALTER TABLE `producao`
-  ADD KEY `COD_PROCESSO` (`COD_PROCESSO`),
-  ADD KEY `COD_PRODUTO` (`COD_PRODUTO`);
-
---
--- Indexes for table `produto`
---
-ALTER TABLE `produto`
-  ADD PRIMARY KEY (`COD_PRODUTO`),
-  ADD UNIQUE KEY `DESCRICAO` (`DESCRICAO`);
-
---
--- Indexes for table `tarefa`
---
-ALTER TABLE `tarefa`
-  ADD PRIMARY KEY (`COD_TAREFA`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `fornecedor`
---
-ALTER TABLE `fornecedor`
-  MODIFY `COD_FORNECEDOR` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `processo`
---
-ALTER TABLE `processo`
-  MODIFY `COD_PROCESSO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `produto`
---
-ALTER TABLE `produto`
-  MODIFY `COD_PRODUTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- AUTO_INCREMENT for table `tarefa`
---
-ALTER TABLE `tarefa`
-  MODIFY `COD_TAREFA` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
--- Constraints for dumped tables
---
-
---
--- Limitadores para a tabela `composicao`
---
-ALTER TABLE `composicao`
-  ADD CONSTRAINT `composicao_ibfk_1` FOREIGN KEY (`COD_PRODUTO`) REFERENCES `produto` (`COD_PRODUTO`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `composicao_ibfk_2` FOREIGN KEY (`COD_COMPONENTE`) REFERENCES `produto` (`COD_PRODUTO`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Limitadores para a tabela `comprado_no`
---
-ALTER TABLE `comprado_no`
-  ADD CONSTRAINT `comprado_no_ibfk_1` FOREIGN KEY (`COD_PRODUTO`) REFERENCES `produto` (`COD_PRODUTO`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `comprado_no_ibfk_2` FOREIGN KEY (`COD_FORNECEDOR`) REFERENCES `fornecedor` (`COD_FORNECEDOR`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Limitadores para a tabela `ordem_execucao`
---
-ALTER TABLE `ordem_execucao`
-  ADD CONSTRAINT `ordem_execucao_ibfk_1` FOREIGN KEY (`COD_PROCESSO`) REFERENCES `processo` (`COD_PROCESSO`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ordem_execucao_ibfk_2` FOREIGN KEY (`COD_TAREFA`) REFERENCES `tarefa` (`COD_TAREFA`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Limitadores para a tabela `producao`
---
-ALTER TABLE `producao`
-  ADD CONSTRAINT `producao_ibfk_1` FOREIGN KEY (`COD_PROCESSO`) REFERENCES `processo` (`COD_PROCESSO`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `producao_ibfk_2` FOREIGN KEY (`COD_PRODUTO`) REFERENCES `produto` (`COD_PRODUTO`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

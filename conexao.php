@@ -51,8 +51,16 @@ if(isset($_POST["acao"])){
     }
     
     if($_POST["acao"]=="inserirComposicao"){
+        
         inserirComposicao();
     }
+    if($_POST["acao"]=="alterarComposicao"){
+        alterarComposicao();
+    }
+    if($_POST["acao"]=="excluirComposicao"){
+        excluirComposicao();
+    }
+    
     
     if($_POST["acao"]=="inserirComprado"){
         inserirComprado();
@@ -213,13 +221,54 @@ function selectAllOrdens(){
 
 function selectAllComposicao(){
     $banco = abrirBanco();
-    $sql = "SELECT * FROM composicao ORDER BY cod_produto";
+    $sql = "select c.cod_produto, c.cod_componente, p.descricao as produto, pr.descricao componente, c.quantidade
+    from composicao as c
+    natural join produto as p
+    inner join produto as pr 
+    on pr.cod_produto = c.cod_componente
+    order by c.cod_produto";
     $resultado = $banco->query($sql);
     $banco->close();
     while ($row = mysqli_fetch_array($resultado)) {
         $todasComposicao[] = $row;
     }
     return $todasComposicao;
+}
+
+function alterarComposicao(){
+    $banco = abrirBanco();
+    $sql = "UPDATE composicao set 
+    cod_produto = (select cod_produto from produto where descricao = '{$_POST["PRODUTO"]}'),
+    cod_componente = (select cod_produto from produto where descricao = '{$_POST["COMPONENTE"]}'),
+    quantidade = '{$_POST[QUANTIDADE]}'
+    where cod_produto = '{$_POST["COD_PRODUTO"]}' and cod_componente = '{$_POST["COD_COMPONENTE"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function selectCodComposicao($cod_produto,$cod_componente){
+    $banco = abrirBanco();
+    $sql = "select c.cod_produto, c.cod_componente, p.descricao as produto, pr.descricao componente, c.quantidade
+    from composicao as c
+    natural join produto as p
+    inner join produto as pr 
+    on pr.cod_produto = c.cod_componente
+    where c.cod_produto =".$cod_produto." and c.cod_componente =".$cod_componente;
+    $resultado = $banco->query($sql);
+    $banco->close();
+    $tarefa = mysqli_fetch_assoc($resultado);
+    return $tarefa;
+}
+
+function excluirComposicao(){
+    $banco = abrirBanco();
+    $sql = "DELETE FROM composicao 
+            WHERE cod_produto='{$_POST["COD_PRODUTO"]}' 
+            AND cod_componente = '{$_POST["COD_COMPONENTE"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
 }
 
 function selectAllComprado(){
@@ -268,8 +317,12 @@ function inserirOrdemExecucao(){
 function inserirComposicao(){
     $banco = abrirBanco();
     $sql = "INSERT INTO composicao(COD_PRODUTO, COD_COMPONENTE, QUANTIDADE) "
-            . "VALUES ('{$_POST["COD_PRODUTO"]}','{$_POST["COD_COMPONENTE"]}','{$_POST["QUANTIDADE"]}')";
+            . "VALUES ((SELECT cod_produto from produto where descricao = '{$_POST["PRODUTO"]}'),
+                       (SELECT cod_produto from produto where descricao = '{$_POST["COMPONENTE"]}'),
+                       '{$_POST["QUANTIDADE"]}')";
+
     $banco->query($sql);
+    
     $banco->close();
     voltarIndex();
 }

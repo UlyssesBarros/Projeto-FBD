@@ -11,8 +11,8 @@
     <table border="1">
             <thead>
                 <tr>                                        
-                    <th>Código Processo</th>
-                    <th>Código Tarefa</th>
+                    <th>Processo</th>
+                    <th>Tarefa</th>
                     <th>Ordem</th>                    
                 </tr>
             </thead>

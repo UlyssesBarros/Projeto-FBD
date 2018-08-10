@@ -15,7 +15,7 @@
                 <td><input type="text" name="nome" value="" /></td>
             </tr>
             <tr>
-                <td>Tempo:</td>
+                <td>Tempo em minutos:</td>
                 <td><input type="number" step=".01" name="tempo" value="" /></td>
             </tr>
                      

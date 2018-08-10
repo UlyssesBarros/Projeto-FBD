@@ -11,8 +11,8 @@
     <table border="1">
             <thead>
                 <tr>                                        
-                    <th>Código Produto</th>
-                    <th>Código Componente</th>
+                    <th>Produto</th>
+                    <th>Componente</th>
                     <th>Quantidade</th>
                     <th>Editar</th>
                     <th>Excluir</th>
@@ -22,21 +22,23 @@
                 <?php
                     foreach ($todasComposicao as $composicao) { ?>
                     <tr>
-                    <td><?=$composicao["COD_PRODUTO"]?></td>                                        
-                    <td><?=$composicao["COD_COMPONENTE"]?></td>                    
-                    <td><?=$composicao["QUANTIDADE"]?></td>                    
+                    <td><?=$composicao["produto"]?></td>                                        
+                    <td><?=$composicao["componente"]?></td>                    
+                    <td><?=$composicao["quantidade"]?></td>                    
                     <td>
-                        <form name="alterar" action="alterar.php" method="POST">
-                            <input type="hidden" name="COD_PRODUTO" value=<?=$composicao["COD_PRODUTO"]?> />
+                        <form name="alterar" action="alterarComposicao.php" method="POST">
+                            <input type="hidden" name="COD_PRODUTO" value=<?=$composicao["cod_produto"]?> />
+                            <input type="hidden" name="COD_COMPONENTE" value=<?=$composicao["cod_componente"]?> />
                             <input type="submit" value="Editar" name="editar" />
-                            </form>
+                        </form>
                     </td>
                     <td>
                         <form name="excluir" action="conexao.php" method="POST">
-                            <input type="hidden" name="COD_TAREFA" value="<?=$producao["COD_PRODUTO"]?>" />
-                            <input type="hidden" name="acao" value="excluir" />
+                            <input type="hidden" name="COD_PRODUTO" value=<?=$composicao["cod_produto"]?> />
+                            <input type="hidden" name="COD_COMPONENTE" value=<?=$composicao["cod_componente"]?> />
+                            <input type="hidden" name="acao" value="excluirComposicao" />
                             <input type="submit" value="Excluir" name="excluir" />
-                            </form>
+                        </form>
                         
                     </td>
                     </tr>

@@ -12,15 +12,15 @@
         <tbody>
             <tr>
                 <td>Código Produto:</td>
-                <td><input type="number" step="1" name="COD_PRODUTO" value="" /></td>
+                <td><input type="text" name="PRODUTO" value="" /></td>
             </tr>
             <tr>
                 <td>Código Componente:</td>
-                <td><input type="number" step="1" name="COD_COMPONENTE" value="" /></td>
+                <td><input type="text"  name="COMPONENTE" value="" /></td>
             </tr>
             <tr>
                 <td>Quantidade:</td>
-                <td><input type="number" step="1" name="QUANTIDADE" value="" /></td>
+                <td><input type="number" name="QUANTIDADE" value="" /></td>
             </tr>                     
             <tr>                
                 <td><input type="hidden" name="acao" value="inserirComposicao" /></td>
