@@ -13,7 +13,7 @@
                 <tr>                                        
                     <th>Processo</th>
                     <th>Tarefa</th>
-                    <th>Ordem</th>                    
+                    <th>Ordem</th>             
                 </tr>
             </thead>
     <tbody>

@@ -65,6 +65,14 @@ if(isset($_POST["acao"])){
     if($_POST["acao"]=="inserirComprado"){
         inserirComprado();
     }
+    if($_POST["acao"]=="alterarComprado"){
+        alterarComprado();
+    }
+    if($_POST["acao"]=="excluirComprado"){
+        
+        excluirComprado();
+    }
+
     
     if($_POST["acao"]=="inserirFornecedor"){
         inserirFornecedor();
@@ -85,9 +93,6 @@ if(isset($_POST["acao"])){
     }
     
     if($_POST["acao"]=="alterarProducao"){
-        //echo $_POST["produto"];
-        //echo $_POST["processo"];
-        //echo $_POST["cod_produto"];
         alterarProducao();
     }
     
@@ -95,6 +100,38 @@ if(isset($_POST["acao"])){
         excluirProducao();
     }
         
+}
+
+function selectTarefaByProcesso(){
+    $banco= abrirBanco();
+    $sql = "SELECT * FROM ORDEM WHERE COD_PROCESSO = '{$_POST["COD_PROCESSO"]}'";
+    $resultado = $banco->query($sql);
+    $banco->close();
+    $ordem = null;
+    while($row = mysqli_fetch_assoc($resultado)){
+        $ordem[] = $row;
+    }
+    return $ordem;
+}
+
+function excluirComprado(){
+    $banco = abrirBanco();
+    $sql = "DELETE FROM produto WHERE COD_PRODUTO = '{$_POST["COD_PRODUTO"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
+}
+
+function alterarComprado(){
+    $banco = abrirBanco();
+    $sql = "UPDATE comprado_no SET 
+            cod_produto= (select cod_produto from produto where descricao = ('{$_POST["PRODUTO"]}')),
+            cod_fornecedor = (select cod_fornecedor from fornecedor where nome = ('{$_POST["FORNECEDOR"]}')),
+            prazo_entrega = '{$_POST["PRAZO"]}' 
+            WHERE cod_produto = '{$_POST["COD_PRODUTO"]}'";
+    $banco->query($sql);
+    $banco->close();
+    voltarIndex();
 }
 
 function inserirProduto(){
@@ -107,10 +144,13 @@ function inserirProduto(){
 }
 
 function excluirProduto(){
+    
     $banco = abrirBanco();
-    $sql = "DELETE FROM produto WHERE cod_produto='{$_POST["COD_PRODUTO"]}'";
+    $sql = "DELETE FROM PRODUTO WHERE COD_PRODUTO = '{$_POST["COD_PRODUTO"]}'";
+    echo($sql);
     $banco->query($sql);
     $banco->close();
+
     voltarIndex();
 }
 
@@ -268,6 +308,20 @@ function selectCodComposicao($cod_produto,$cod_componente){
     return $tarefa;
 }
 
+function selectCodComprado($cod_produto){
+    $banco = abrirBanco();
+    $sql = "SELECT cod_produto, cod_fornecedor, p.descricao AS produto, f.nome AS fornecedor, prazo_entrega AS prazo  
+            FROM comprado_no 
+            NATURAL JOIN produto AS p 
+            NATURAL JOIN fornecedor AS f
+            WHERE cod_produto = ".$cod_produto;
+    $resultado = $banco->query($sql);
+    $banco->close();
+    $comprado = mysqli_fetch_assoc($resultado);
+    return $comprado;
+}
+
+
 function excluirComposicao(){
     $banco = abrirBanco();
     $sql = "DELETE FROM composicao 
@@ -280,7 +334,10 @@ function excluirComposicao(){
 
 function selectAllComprado(){
     $banco = abrirBanco();
-    $sql = "SELECT * FROM comprado_no ORDER BY cod_produto";
+    $sql = "SELECT cod_produto, cod_fornecedor, p.descricao AS produto, f.nome AS fornecedor, prazo_entrega AS prazo  
+            FROM comprado_no 
+            NATURAL JOIN produto AS p 
+            NATURAL JOIN fornecedor AS f";
     $resultado = $banco->query($sql);
     $banco->close();
     while ($row = mysqli_fetch_array($resultado)) {
@@ -290,7 +347,7 @@ function selectAllComprado(){
 }
 
 function abrirBanco(){
-    $conexao = new mysqli("localhost", "root", "", "fabricacao");
+    $conexao = new mysqli("localhost", "aluno", "alunodeinfo", "fabricacao");
     return $conexao;
 }
 
@@ -337,8 +394,11 @@ function inserirComposicao(){
 
 function inserirComprado(){
     $banco = abrirBanco();
-    $sql = "INSERT INTO comprado_no(COD_PRODUTO, COD_FORNECEDOR, PRAZO_ENTREGA) "
-            . "VALUES ('{$_POST["COD_PRODUTO"]}','{$_POST["COD_FORNECEDOR"]}','{$_POST["PRAZO_ENTREGA"]}')";
+    $sql = "INSERT INTO comprado_no(COD_PRODUTO, COD_FORNECEDOR, PRAZO_ENTREGA) 
+            VALUES ((select cod_produto from produto where descricao = '{$_POST["PRODUTO"]}'),
+                    (select cod_fornecedor from fornecedor where nome ='{$_POST["FORNECEDOR"]}'),
+                    '{$_POST["PRAZO"]}')";
+    echo $sql;
     $banco->query($sql);
     $banco->close();
     voltarIndex();

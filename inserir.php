@@ -11,19 +11,19 @@
         <a href="inserirTarefa.php">Adicionar Tarefa</a>  
         <br>
         <br>
-        <a href="inserirProcesso.php">Adicionar Processo</a>  
+        <a href="inserirProcesso.php">Adicionar Processo de produção</a>  
         <br>
         <br>
-        <a href="inserirProducao.php">Adicionar Produção</a>
+        <a href="inserirProducao.php">Adicionar um processo ao produto</a>
         <br>
         <br>
         <a href="inserirOrdemExecucao.php">Adicionar Ordem Execução</a>
         <br>
         <br>
-        <a href="inserirComposicao.php">Adicionar Composição</a>
+        <a href="inserirComposicao.php">Adicionar um componente a um produto</a>
         <br>
         <br>
-        <a href="inserirComprado.php">Adicionar Comprado</a>
+        <a href="inserirComprado.php">Adicionar Insumo - Fornecedor</a>
         <br>
         <br>
         <a href="inserirFornecedor.php">Adicionar Fornecedor</a>

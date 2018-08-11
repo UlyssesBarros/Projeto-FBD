@@ -11,11 +11,11 @@
     <table border="1">
         <tbody>
             <tr>
-                <td>Código Produto:</td>
+                <td>Produto:</td>
                 <td><input type="text" name="PRODUTO" value="" /></td>
             </tr>
             <tr>
-                <td>Código Componente:</td>
+                <td>Componente:</td>
                 <td><input type="text"  name="COMPONENTE" value="" /></td>
             </tr>
             <tr>

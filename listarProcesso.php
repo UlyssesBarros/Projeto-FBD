@@ -21,6 +21,7 @@
                     <th>Código Processo</th>                     
                     <th>Editar</th>
                     <th>Excluir</th>
+                    <th>Alterar Tarefas</th>
                 </tr>
             </thead>
     <tbody>
@@ -43,6 +44,15 @@
                             </form>
                         
                     </td>
+                    <td>
+                        <form name="excluir" action="alterarTarefas.php" method="POST">
+                            <input type="hidden" name="COD_PROCESSO" value="<?=$processo["COD_PROCESSO"]?>" />
+                            <input type="hidden" name="acao" value="alterarTarefass" />
+                            <input type="submit" value="Alterar Tarefas" name="excluir" />
+                            </form>
+                        
+                    </td>
+                    
                     </tr>
                  <?php  }
                 ?>

@@ -11,16 +11,16 @@
     <table border="1">
         <tbody>
             <tr>
-                <td>Código Produto:</td>
-                <td><input type="number" step="1" name="COD_PRODUTO" value="" /></td>
+                <td>Produto:</td>
+                <td><input type="text" step="1" name="PRODUTO" value="" /></td>
             </tr>
             <tr>
-                <td>Código Fornecedor:</td>
-                <td><input type="number" step="1" name="COD_FORNECEDOR" value="" /></td>
+                <td>Fornecedor:</td>
+                <td><input type="text" step="1" name="FORNECEDOR" value="" /></td>
             </tr>
             <tr>
                 <td>Prazo Entrega:</td>
-                <td><input type="date" name="PRAZO_ENTREGA" value="" /></td>
+                <td><input type="text" name="PRAZO" value="" /></td>
             </tr>                     
             <tr>                
                 <td><input type="hidden" name="acao" value="inserirComprado" /></td>

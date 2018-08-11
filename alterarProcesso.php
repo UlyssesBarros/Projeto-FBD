@@ -7,7 +7,7 @@
  */
 include("conexao.php");
 $processo = selectCodProcesso($_POST["COD_PROCESSO"]);
-echo $processo;
+
 
 ?>
 <meta charset="UTF-8">
