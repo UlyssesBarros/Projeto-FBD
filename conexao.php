@@ -347,7 +347,7 @@ function selectAllComprado(){
 }
 
 function abrirBanco(){
-    $conexao = new mysqli("localhost", "aluno", "alunodeinfo", "fabricacao");
+    $conexao = new mysqli("localhost", "root", "", "fabricacao");
     return $conexao;
 }
 
